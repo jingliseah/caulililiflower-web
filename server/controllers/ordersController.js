@@ -1,5 +1,29 @@
 import db from "../db/index.js";
 
+// Admin
+// Get all orders
+export async function getAllOrders(req, res, next) {
+  try {
+    const { rows } = await db.query(`
+      SELECT
+        o.id,
+        o.total_price,
+        o.status,
+        o.created_at,
+        u.username,
+        COUNT(oi.id) AS total_items
+      FROM orders o
+      JOIN users u ON o.user_id = u.id
+      LEFT JOIN order_items oi ON oi.order_id = o.id
+      GROUP BY o.id, u.username
+      ORDER BY o.id DESC
+    `);
+    res.json(rows);
+  } catch (err) {
+    next(err);
+  }
+}
+
 // Customer
 // create user order
 export async function createOrder(req, res, next) {

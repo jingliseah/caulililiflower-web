@@ -1,6 +1,7 @@
 import express from "express";
 
 import {
+  getAllProducts,
   getSellerProducts,
   createProduct,
   deleteProduct,
@@ -9,6 +10,9 @@ import {
 } from "../controllers/productsController.js";
 
 const router = express.Router();
+
+// Get all products
+router.get("/", getAllProducts);
 
 // Get seller products
 router.get(

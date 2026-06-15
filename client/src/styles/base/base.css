@@ -1,129 +1,280 @@
-/* =========================================================
-   CORE COLORS
-========================================================= */
+/* ============================================================
+   Caulililiflower — Design System Tokens
+   "Each hue is inspired by Cauliger's world — soft gardens,
+    warm sunlight, wooden corners, and gentle storybook tones."
+   ============================================================ */
 
 @theme {
-  /* Neutral */
-  --color-white: #ffffff;
+  /* ---- Cauli World (core brand hues) ---------------------- */
+  --terracotta: #cb4d21;
+  --terracotta-deep: #a83d18;
+  --terracotta-soft: #e07a52;
+  --butter: #f4db8c;
+  --butter-deep: #e8c662;
+  --sky: #4480ac;
+  --sky-deep: #356488;
+  --moss: #5b6f3c;
+  --moss-deep: #47572e;
 
-  --color-grey-50: #fafaf8;
-  --color-grey-100: #f3f3f1;
-  --color-grey-200: #e8e6e1;
-  --color-grey-300: #d8d5cf;
-  --color-grey-400: #b5b1aa;
-  --color-grey-500: #8b8680;
-  --color-grey-600: #6b6761;
-  --color-grey-700: #4b4844;
-  --color-grey-800: #2b2a28;
-  --color-grey-900: #111111;
+  /* ---- Grounding tones ------------------------------------ */
+  --walnut: #3b2016;
+  --walnut-soft: #5a4334;
+  --cream: #ebe6ce;
 
-  --color-black-opacity-70: rgba(0, 0, 0, 0.7);
+  /* ---- Warm paper ramp ------------------------------------ */
+  --paper-50:  #faf7ee;
+  --paper-100: #f4efe0;
+  --paper-200: #ebe6ce;
+  --paper-300: #e2d7bb;
+  --paper-400: #cdbf9f;
+  --paper-500: #ab9b7c;
+  --paper-600: #84745a;
+  --paper-700: #5a4434;
+  --paper-800: #3b2016;
+  --paper-900: #2a1610;
 
-  /* Brand */
-  --color-brand-primary: #111111;
-  --color-brand-secondary: #f7f7f5;
-  --color-brand-accent: #d8f5d0;
+  /* ---- Product Category accents --------------------------- */
+  --cat-terracotta: #cb4d21;
+  --cat-moss:       #5b6f3c;
+  --cat-sky:        #4480ac;
+  --cat-pistachio:  #cbd183;
+  --cat-bubblegum:  #f8a1c4;
+  --cat-golden:     #f0ba0e;
+  --cat-lilac:      #a592d4;
+  --cat-teal:       #49b4a7;
+  --cat-blush:      #edbaa5;
 
-  /* Purple */
-  --color-purple-50: #f5f3ff;
-  --color-purple-100: #ede9fe;
-  --color-purple-200: #ddd6fe;
-  --color-purple-300: #c4b5fd;
-  --color-purple-400: #a78bfa;
-  --color-purple-500: #8b5cf6;
-  --color-purple-600: #7c3aed;
-  --color-purple-700: #6d28d9;
-  --color-purple-800: #5b21b6;
-  --color-purple-900: #4c1d95;
+  /* ---- Semantic feedback ---------------------------------- */
+  --color-success: #5b6f3c;
+  --color-warning: #e8a40e;
+  --color-danger:  #c0431f;
+  --color-info:    #4480ac;
 
-  --color-purple-500-opacity-80: rgba(139, 92, 246, 0.8);
+  /* ---- Semantic aliases ----------------------------------- */
+  --color-bg:          #f4efe0;
+  --color-bg-sunken:   #ebe6ce;
+  --surface-card:      #fffdf7;
+  --surface-raised:    #ffffff;
+  --surface-inverse:   #3b2016;
 
-  /* Status */
-  --color-success: #0f7855;
-  --color-warning: #f59e0b;
-  --color-danger: #dc2626;
+  --text-strong:       #3b2016;
+  --text-body:         #4a3527;
+  --text-muted:        #8a7763;
+  --text-on-brand:     #ebe6ce;
 
-  /* Surface */
-  --color-surface-primary: #ffffff;
-  --color-surface-secondary: #fafaf8;
-  --color-surface-tertiary: #f3f3f1;
+  --border-soft:       #e3dcc6;
+  --border-default:    #d8cdab;
+  --border-strong:     #3b2016;
 
-  /* Borders */
-  --color-border-primary: #eceae4;
-  --color-border-secondary: #d8d5cf;
+  --brand-primary:       #cb4d21;
+  --brand-primary-hover: #a83d18;
+  --brand-accent:        #4480ac;
 
-  /* Text */
-  --color-text-primary: #111111;
-  --color-text-secondary: #6b6761;
-  --color-text-muted: #9b9790;
+  --focus-ring:          #4480ac;
+  --overlay-scrim:       rgba(42, 22, 16, 0.46);
 
-  /* =========================================================
-     TYPOGRAPHY
-  ========================================================= */
+  /* ---- Aliases for existing dashboard components ---------- */
+  --color-brand-primary:         #cb4d21;
+  --color-brand-secondary:       #f4db8c;
+  --color-brand-accent:          #d8f5d0;
 
-  /* Fonts */
-  --family-sans: "Inter";
-  --family-serif: "Lora";
-  --family-nunito: "Nunito";
+  --color-surface-primary:       #fffdf7;
+  --color-surface-secondary:     #f4efe0;
+  --color-surface-tertiary:      #ebe6ce;
 
-  /* Font weight */
-  --font-weight-regular: 400;
-  --font-weight-medium: 500;
+  --color-border-primary:        #e3dcc6;
+  --color-border-secondary:      #d8cdab;
+
+  --color-text-primary:          #3b2016;
+  --color-text-secondary:        #4a3527;
+  --color-text-muted:            #8a7763;
+
+  --color-white:       #fffdf7;
+
+  /* ---- Typography ----------------------------------------- */
+  --font-display: "Instrument Serif", "Fraunces", Georgia, "Times New Roman", serif;
+  --font-body:    "Quicksand", ui-rounded, "Segoe UI", system-ui, sans-serif;
+
+  /* Tailwind aliases */
+  --family-sans:   "Quicksand";
+  --family-serif:  "Instrument Serif";
+  --family-nunito: "Instrument Serif";
+  --family-lora:   "Instrument Serif";
+
+  /* ---- Type scale ----------------------------------------- */
+  --text-2xs: 0.694rem;
+  --text-xs:  0.8rem;
+  --text-sm:  0.875rem;
+  --text-base: 1rem;
+  --text-md:  1.125rem;
+  --text-lg:  1.375rem;
+  --text-xl:  1.75rem;
+  --text-2xl: 2.25rem;
+  --text-3xl: 3rem;
+  --text-4xl: 4rem;
+  --text-5xl: 5.5rem;
+
+  --font-size-12: 0.75rem;
+  --font-size-14: 0.875rem;
+  --font-size-16: 1rem;
+  --font-size-18: 1.125rem;
+  --font-size-20: 1.25rem;
+  --font-size-24: 1.5rem;
+  --font-size-28: 1.75rem;
+  --font-size-32: 2rem;
+  --font-size-40: 2.5rem;
+  --font-size-48: 3rem;
+
+  /* ---- Weights -------------------------------------------- */
+  --weight-light:    300;
+  --weight-regular:  400;
+  --weight-medium:   500;
+  --weight-semibold: 600;
+  --weight-bold:     700;
+
+  --font-weight-regular:   400;
+  --font-weight-medium:    500;
   --font-weight-semi-bold: 600;
-  --font-weight-bold: 700;
-  --font-weight-black: 900;
+  --font-weight-bold:      700;
+  --font-weight-black:     900;
 
-  /* Font size */
-  --font-size-12: 12px;
-  --font-size-14: 14px;
-  --font-size-16: 16px;
-  --font-size-18: 18px;
-  --font-size-20: 20px;
-  --font-size-24: 24px;
-  --font-size-28: 28px;
-  --font-size-32: 32px;
-  --font-size-40: 40px;
-  --font-size-48: 48px;
+  /* ---- Line heights --------------------------------------- */
+  --leading-tight:   1.05;
+  --leading-snug:    1.2;
+  --leading-normal:  1.5;
+  --leading-relaxed: 1.7;
 
-  /* Line height */
-  --line-height-xs: 16px;
-  --line-height-sm: 20px;
-  --line-height-md: 24px;
-  --line-height-lg: 28px;
-  --line-height-xl: 32px;
-  --line-height-2xl: 40px;
-  --line-height-4xl: 52px;
+  --line-height-xs:  1rem;
+  --line-height-sm:  1.25rem;
+  --line-height-md:  1.5rem;
+  --line-height-lg:  1.75rem;
+  --line-height-xl:  2rem;
+  --line-height-2xl: 2.5rem;
+  --line-height-4xl: 3.25rem;
+  --line-height-5xl: 4rem;
 
-  /* Letter spacing */
+  /* ---- Letter spacing ------------------------------------- */
+  --tracking-tight:  -0.01em;
+  --tracking-normal: 0;
+  --tracking-wide:   0.04em;
+  --tracking-wider:  0.14em;
+
   --letter-spacing-none: 0;
-  --letter-spacing-sm: 0.2px;
-  --letter-spacing-md: 0.5px;
-  --letter-spacing-lg: 1px;
+  --letter-spacing-sm:   0.2px;
+  --letter-spacing-md:   0.5px;
+  --letter-spacing-lg:   1px;
 
-  /* =========================================================
-     RADIUS
-  ========================================================= */
-
-  --radius-sm: 12px;
-  --radius-md: 18px;
-  --radius-lg: 24px;
-  --radius-xl: 32px;
+  /* ---- Radii ---------------------------------------------- */
+  --radius-xs:   4px;
+  --radius-sm:   8px;
+  --radius-md:   12px;
+  --radius-lg:   18px;
+  --radius-xl:   26px;
+  --radius-2xl:  36px;
+  --radius-pill: 999px;
   --radius-full: 999px;
+  --radius-blob: 60% 40% 55% 45% / 50% 55% 45% 50%;
 
-  /* =========================================================
-     SHADOWS
-  ========================================================= */
+  /* ---- Spacing -------------------------------------------- */
+  --space-0: 0;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 2.5rem;
+  --space-8: 3rem;
+  --space-9: 4rem;
+  --space-10: 5rem;
+  --space-12: 7rem;
 
-  --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.04);
+  --spacing-18: 4.5rem;
+  --spacing-22: 5.5rem;
 
-  --shadow-card: 0 12px 30px rgba(0, 0, 0, 0.06);
+  /* ---- Container widths ----------------------------------- */
+  --container-sm: 640px;
+  --container-md: 880px;
+  --container-lg: 1140px;
+  --container-xl: 1320px;
 
-  --shadow-floating: 0 20px 50px rgba(0, 0, 0, 0.12);
+  /* ---- Shadows — warm, paper-soft ------------------------- */
+  --shadow-xs:     0 1px 2px rgba(59, 32, 22, 0.08);
+  --shadow-sm:     0 2px 6px rgba(59, 32, 22, 0.10);
+  --shadow-md:     0 8px 20px -8px rgba(59, 32, 22, 0.18);
+  --shadow-lg:     0 18px 40px -14px rgba(59, 32, 22, 0.24);
+  --shadow-focus:  0 0 0 3px rgba(68, 128, 172, 0.40);
+  --shadow-inset:  inset 0 1px 3px rgba(59, 32, 22, 0.10);
 
-  /* =========================================================
-     SPACING
-  ========================================================= */
+  --shadow-soft:   0 4px 20px rgba(59, 32, 22, 0.04);
+  --shadow-card:   0 2px 6px rgba(59, 32, 22, 0.10);
+  --shadow-floating: 0 18px 40px -14px rgba(59, 32, 22, 0.24);
 
-  --spacing-18: 72px;
-  --spacing-22: 88px;
+  /* ---- Tailwind color utility aliases (--color-* → bg-*, text-*, border-*) */
+  --color-terracotta:        #cb4d21;
+  --color-terracotta-deep:   #a83d18;
+  --color-terracotta-soft:   #e07a52;
+  --color-walnut:            #3b2016;
+  --color-walnut-soft:       #5a4334;
+  --color-cream:             #ebe6ce;
+  --color-moss:              #5b6f3c;
+  --color-moss-deep:         #47572e;
+  --color-cauli-sky:         #4480ac;
+  --color-cauli-sky-deep:    #356488;
+  --color-butter:            #f4db8c;
+  /* Surfaces */
+  --color-card:              #fffdf7;
+  --color-page:              #f4efe0;
+  --color-paper-100:         #f4efe0;
+  --color-paper-200:         #ebe6ce;
+  --color-paper-300:         #e2d7bb;
+  /* Text */
+  --color-muted:             #8a7763;
+  --color-strong:            #3b2016;
+  --color-ink:               #4a3527;
+  /* Categories */
+  --color-cat-terra:         #cb4d21;
+  --color-cat-moss:          #5b6f3c;
+  --color-cat-sky:           #4480ac;
+  --color-cat-pistachio:     #cbd183;
+  --color-cat-golden:        #f0ba0e;
+  --color-cat-bubblegum:     #f8a1c4;
+  /* Overlay */
+  --color-scrim:             rgba(42, 22, 16, 0.46);
+
+  /* ---- Motion --------------------------------------------- */
+  --ease-soft:     cubic-bezier(0.33, 0.0, 0.2, 1);
+  --ease-out:      cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 140ms;
+  --duration-base: 240ms;
+  --duration-slow: 420ms;
+  --transition-fast: all 140ms cubic-bezier(0.33, 0.0, 0.2, 1);
+}
+
+/* ---- Base element resets ---------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: var(--weight-regular);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: var(--text-body);
+  background-color: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+img, svg { max-width: 100%; display: block; }
+
+::selection { background: color-mix(in srgb, var(--butter) 70%, transparent); color: var(--walnut); }
+
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2.5px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--radius-xs);
 }

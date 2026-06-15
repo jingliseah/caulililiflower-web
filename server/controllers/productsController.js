@@ -1,5 +1,20 @@
 import db from "../db/index.js";
 
+// Get all products (buyer shop + admin)
+export async function getAllProducts(req, res, next) {
+  try {
+    const { rows } = await db.query(`
+      SELECT tp.*, u.username AS seller_name
+      FROM tshirt_products tp
+      JOIN users u ON tp.seller_id = u.id
+      ORDER BY tp.id DESC
+    `);
+    res.json(rows);
+  } catch (err) {
+    next(err);
+  }
+}
+
 // Get seller products
 export async function getSellerProducts(req, res, next) {
   const { sellerId } = req.params;
