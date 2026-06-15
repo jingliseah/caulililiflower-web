@@ -1,161 +1,84 @@
-import db from "../db/index.js";
+import { listProducts, getProductById } from "../square/catalog.js";
+import { createItem, updateItem, deleteItem, uploadItemImage } from "../square/catalog-write.js";
+import { setInventoryCounts } from "../square/inventory.js";
 
-// Get all products (buyer shop + admin)
 export async function getAllProducts(req, res, next) {
   try {
-    const { rows } = await db.query(`
-      SELECT tp.*, u.username AS seller_name
-      FROM tshirt_products tp
-      JOIN users u ON tp.seller_id = u.id
-      ORDER BY tp.id DESC
-    `);
-    res.json(rows);
+    const products = await listProducts();
+    res.json(products);
   } catch (err) {
     next(err);
   }
 }
 
-// Get seller products
-export async function getSellerProducts(req, res, next) {
-  const { sellerId } = req.params;
-
-  try {
-    const { rows } = await db.query(
-      `
-      SELECT *
-      FROM tshirt_products
-      WHERE seller_id = $1
-      ORDER BY id DESC
-      `,
-      [sellerId]
-    );
-
-    res.json(rows);
-
-  } catch (err) {
-    next(err);
-  }
-}
-
-// Get single product by id
-export async function getProductById(req, res, next) {
+export async function getProduct(req, res, next) {
   const { id } = req.params;
-
   try {
-
-    const { rows } = await db.query(
-      `
-      SELECT *
-      FROM tshirt_products
-      WHERE id = $1
-      `,
-      [id]
-    );
-
-    // IMPORTANT
-    res.json(rows[0]);
-
+    const product = await getProductById(id);
+    if (!product) return res.status(404).json({ error: "Product not found" });
+    res.json(product);
   } catch (err) {
     next(err);
   }
 }
 
-// Create product
 export async function createProduct(req, res, next) {
-  const {
-    name,
-    sku,
-    price,
-    image_url,
-    seller_id,
-  } = req.body;
-
   try {
-    const { rows } = await db.query(
-      `
-      INSERT INTO tshirt_products
-      (
-        name,
-        sku,
-        price,
-        image_url,
-        seller_id
-      )
-      VALUES ($1, $2, $3, $4, $5)
-      RETURNING *
-      `,
-      [
-        name,
-        sku,
-        price,
-        image_url,
-        seller_id,
-      ]
-    );
-
-    res.status(201).json(rows[0]);
-
+    const { name, description, categoryId, variations } = req.body;
+    if (!name || !variations?.length) {
+      return res.status(400).json({ error: "name and at least one variation are required" });
+    }
+    const obj = await createItem({ name, description, categoryId, variations });
+    res.status(201).json(obj);
   } catch (err) {
     next(err);
   }
 }
 
-// Update product
 export async function updateProduct(req, res, next) {
   const { id } = req.params;
-
-  const {
-    name,
-    sku,
-    price,
-    image_url,
-  } = req.body;
-
   try {
-    const { rows } = await db.query(
-      `
-      UPDATE tshirt_products
-      SET
-        name = $1,
-        sku = $2,
-        price = $3,
-        image_url = $4
-      WHERE id = $5
-      RETURNING *
-      `,
-      [
-        name,
-        sku,
-        price,
-        image_url,
-        id,
-      ]
-    );
-
-    res.json(rows[0]);
-
+    const { name, description, categoryId, variations } = req.body;
+    if (!name || !variations?.length) {
+      return res.status(400).json({ error: "name and at least one variation are required" });
+    }
+    const obj = await updateItem(id, { name, description, categoryId, variations });
+    res.json(obj);
   } catch (err) {
     next(err);
   }
 }
 
-// Delete product
-export async function deleteProduct(req, res, next) {
+export async function removeProduct(req, res, next) {
   const { id } = req.params;
-
   try {
-    await db.query(
-      `
-      DELETE FROM tshirt_products
-      WHERE id = $1
-      `,
-      [id]
-    );
+    const result = await deleteItem(id);
+    res.json(result);
+  } catch (err) {
+    next(err);
+  }
+}
 
-    res.json({
-      message: "Product deleted",
-    });
+export async function updateStock(req, res, next) {
+  try {
+    // body: { changes: [{ variationId, quantity }] }
+    const { changes } = req.body;
+    if (!Array.isArray(changes) || changes.length === 0) {
+      return res.status(400).json({ error: "changes array is required" });
+    }
+    const result = await setInventoryCounts(changes);
+    res.json(result);
+  } catch (err) {
+    next(err);
+  }
+}
 
+export async function uploadImage(req, res, next) {
+  const { id } = req.params;
+  try {
+    if (!req.file) return res.status(400).json({ error: "No image file uploaded" });
+    const url = await uploadItemImage(id, req.file.buffer, req.file.originalname, req.file.mimetype);
+    res.json({ url });
   } catch (err) {
     next(err);
   }

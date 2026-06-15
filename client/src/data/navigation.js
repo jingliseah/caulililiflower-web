@@ -4,7 +4,16 @@
  */
 export const NAV_LINKS = [
   { to: "/about", label: "Our story" },
-  { to: "/shop", label: "Shop" },
+  {
+    to: "/shop",
+    label: "Shop",
+    dropdown: [
+      { to: "/shop?type=Keychain",          label: "Keychain" },
+      { to: "/shop?type=Brooch",            label: "Brooch" },
+      { to: `/shop?${new URLSearchParams({ type: "Keychain + Brooch" })}`, label: "Keychain + Brooch" },
+      { to: "/shop?type=Postcard",          label: "Postcard" },
+    ],
+  },
   { to: "/custom-order", label: "Custom order" },
 ];
 

@@ -29,14 +29,10 @@ export default function UserProfile() {
       .catch((err) => console.error(err));
 
     // ORDERS
-    fetch(`/api/orders/${id}`)
+    fetch(`/api/orders/user/${id}`)
       .then((res) => res.json())
-      .then((data) => {
-        console.log("ORDERS:", data);
-
-        setOrders(data);
-      })
-      .catch((err) => console.error(err));
+      .then(setOrders)
+      .catch(console.error);
 
   }, [id]);
 

@@ -1,298 +1,155 @@
 import { useEffect, useState } from "react";
-
 import { Link } from "react-router-dom";
-
 import { useAuth } from "../../context/AuthContext";
 
 export default function Overview() {
-  // Auth
   const { user } = useAuth();
 
-  // State
   const [products, setProducts] = useState([]);
+  const [orders,   setOrders]   = useState([]);
+  const [loading,  setLoading]  = useState(true);
 
-  const [orders, setOrders] = useState([]);
-
-  const [inventory, setInventory] = useState([]);
-
-  // Fetch dashboard data
   useEffect(() => {
-    if (!user) return;
-
-    // Products
-    fetch(`/api/products/seller/${user.id}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setProducts(data);
+    Promise.all([
+      fetch("/api/products").then((r) => r.json()),
+      fetch("/api/orders").then((r) => r.json()),
+    ])
+      .then(([prods, ords]) => {
+        setProducts(Array.isArray(prods) ? prods : []);
+        setOrders(Array.isArray(ords) ? ords : []);
       })
-      .catch((err) => console.error(err));
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, []);
 
-    // Orders
-    fetch(`/api/orders/seller/${user.id}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setOrders(data);
-      })
-      .catch((err) => console.error(err));
+  const totalRevenue  = orders.reduce((acc, o) => acc + Number(o.total_price), 0);
+  const pendingOrders = orders.filter((o) => o.status === "pending").length;
+  const lowStockItems = products.filter((p) => p.in_stock === false);
 
-    // Inventory
-    fetch(`/api/inventory/seller/${user.id}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setInventory(data);
-      })
-      .catch((err) => console.error(err));
-  }, [user]);
-
-  // Low stock items
-  const lowStockItems = inventory.filter((item) => item.quantity <= 5);
-
-  // Revenue
-  const totalRevenue = orders.reduce(
-    (acc, order) => acc + Number(order.total_price),
-    0,
-  );
+  const statusColor = (status) => {
+    if (status === "pending")    return "bg-yellow-100 text-yellow-700";
+    if (status === "processing") return "bg-blue-100 text-blue-700";
+    if (status === "shipped")    return "bg-purple-100 text-purple-700";
+    if (status === "delivered")  return "bg-green-100 text-green-700";
+    if (status === "cancelled")  return "bg-red-100 text-red-700";
+    return "bg-surface-secondary primary";
+  };
 
   return (
     <div>
-      {/* =========================================================
-          HEADER
-      ========================================================= */}
-
+      {/* Header */}
       <div className="mb-10">
         <p className="text-caption tertiary mb-3">Seller Workspace</p>
-
         <h1 className="dashboard-title">Welcome back, {user?.username}</h1>
-
         <p className="dashboard-subtitle mt-3">
-          Here’s a quick overview of your store performance.
+          Here's a quick overview of your store performance.
         </p>
       </div>
 
-      {/* =========================================================
-          ANALYTICS
-      ========================================================= */}
-
-      <div
-        className="
-          grid
-          grid-cols-1
-          sm:grid-cols-2
-          xl:grid-cols-4
-          gap-5
-          mb-8
-        "
-      >
-        {/* Revenue */}
+      {/* Stat cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-8">
         <div className="card p-6">
           <p className="text-caption tertiary mb-3">Revenue</p>
-
-          <h2 className="text-header-3 primary">
-            RM {totalRevenue.toFixed(2)}
-          </h2>
+          <h2 className="text-header-3 primary">RM {totalRevenue.toFixed(2)}</h2>
         </div>
 
-        {/* Orders */}
         <div className="card p-6">
-          <p className="text-caption tertiary mb-3">Orders</p>
-
+          <p className="text-caption tertiary mb-3">Total Orders</p>
           <h2 className="text-header-3 primary">{orders.length}</h2>
         </div>
 
-        {/* Products */}
         <div className="card p-6">
-          <p className="text-caption tertiary mb-3">Products</p>
-
-          <h2 className="text-header-3 primary">{products.length}</h2>
+          <p className="text-caption tertiary mb-3">Pending</p>
+          <h2 className="text-header-3 primary">{pendingOrders}</h2>
         </div>
 
-        {/* Low Stock */}
         <div className="card p-6">
-          <p className="text-caption tertiary mb-3">Low Stock</p>
-
-          <h2 className="text-header-3 primary">{lowStockItems.length}</h2>
+          <p className="text-caption tertiary mb-3">Products (Square)</p>
+          <h2 className="text-header-3 primary">{loading ? "—" : products.length}</h2>
         </div>
       </div>
 
-      {/* =========================================================
-          MAIN GRID
-      ========================================================= */}
+      {/* Main grid */}
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
 
-      <div
-        className="
-          grid
-          grid-cols-1
-          xl:grid-cols-3
-          gap-6
-        "
-      >
-        {/* =========================================================
-            RECENT ORDERS
-        ========================================================= */}
-
-        <div
-          className="
-            card
-            p-6
-            xl:col-span-2
-          "
-        >
-          {/* Header */}
-          <div
-            className="
-              flex
-              items-center
-              justify-between
-              mb-6
-            "
-          >
+        {/* Recent Orders */}
+        <div className="card p-6 xl:col-span-2">
+          <div className="flex items-center justify-between mb-6">
             <div>
               <p className="text-caption tertiary mb-2">Orders</p>
-
               <h2 className="text-header-4 primary">Recent Orders</h2>
             </div>
-
             <Link to="/seller/orders" className="text-label-2 brand-primary">
               View All
             </Link>
           </div>
 
-          {/* Orders */}
-          <div className="space-y-4">
-            {orders.slice(0, 4).map((order) => (
+          <div className="space-y-3">
+            {orders.slice(0, 5).map((order) => (
               <div
                 key={order.id}
-                className="
-                  flex
-                  items-center
-                  justify-between
-                  gap-4
-                  p-4
-                  rounded-2xl
-                  bg-surface-secondary
-                "
+                className="flex items-center justify-between gap-4 p-4 rounded-2xl bg-surface-secondary"
               >
-                {/* Left */}
                 <div>
                   <p className="text-label-2 primary">Order #{order.id}</p>
-
-                  <p className="text-body-3 secondary mt-1">{order.username}</p>
+                  <p className="text-body-3 secondary mt-0.5">
+                    {order.customer_name} · {order.customer_email}
+                  </p>
+                  <p className="text-body-3 secondary">
+                    {new Date(order.created_at).toLocaleDateString("en-MY", {
+                      day: "numeric", month: "short", year: "numeric",
+                    })}
+                  </p>
                 </div>
-
-                {/* Right */}
-                <div className="text-right">
-                  <p className="text-label-2 primary">RM {order.total_price}</p>
-
-                  <span
-                    className={`
-                      inline-flex
-                      mt-2
-                      px-3 py-1.5
-                      rounded-full
-                      text-button-2
-
-                      ${
-                        order.status === "pending"
-                          ? "bg-yellow-100 text-yellow-700"
-                          : order.status === "processing"
-                            ? "bg-blue-100 text-blue-700"
-                            : order.status === "delivered"
-                              ? "bg-green-100 text-green-700"
-                              : "bg-surface-primary primary"
-                      }
-                    `}
-                  >
+                <div className="text-right shrink-0">
+                  <p className="text-label-2 primary">
+                    RM {Number(order.total_price).toFixed(2)}
+                  </p>
+                  <span className={`inline-flex mt-1.5 px-3 py-1 rounded-full text-button-2 capitalize ${statusColor(order.status)}`}>
                     {order.status}
                   </span>
                 </div>
               </div>
             ))}
 
-            {/* Empty */}
-            {orders.length === 0 && (
-              <div
-                className="
-                  rounded-2xl
-                  bg-surface-secondary
-                  p-10
-                  text-center
-                "
-              >
+            {orders.length === 0 && !loading && (
+              <div className="rounded-2xl bg-surface-secondary p-10 text-center">
                 <p className="text-header-4 primary mb-3">No Orders Yet</p>
-
-                <p className="secondary">
-                  Customer purchases will appear here.
-                </p>
+                <p className="secondary">Customer purchases will appear here.</p>
               </div>
             )}
           </div>
         </div>
 
-        {/* =========================================================
-            LOW STOCK
-        ========================================================= */}
-
+        {/* Out of stock */}
         <div className="card p-6">
-          {/* Header */}
           <div className="mb-6">
             <p className="text-caption tertiary mb-2">Inventory</p>
-
-            <h2 className="text-header-4 primary">Low Stock Alerts</h2>
+            <h2 className="text-header-4 primary">Out of Stock</h2>
           </div>
 
-          {/* Alerts */}
-          <div className="space-y-4">
-            {lowStockItems.slice(0, 5).map((item) => (
+          <div className="space-y-3">
+            {lowStockItems.slice(0, 6).map((item) => (
               <div
                 key={item.id}
-                className="
-                  flex
-                  items-center
-                  justify-between
-                  gap-4
-                  p-4
-                  rounded-2xl
-                  bg-surface-secondary
-                "
+                className="flex items-center justify-between gap-4 p-4 rounded-2xl bg-surface-secondary"
               >
-                {/* Product */}
-                <div>
-                  <p className="text-label-2 primary">{item.product_name}</p>
-
-                  <p className="text-body-3 secondary mt-1">Size {item.size}</p>
+                <div className="min-w-0">
+                  <p className="text-label-2 primary truncate">{item.name}</p>
+                  {item.category_name && (
+                    <p className="text-body-3 secondary mt-0.5">{item.category_name}</p>
+                  )}
                 </div>
-
-                {/* Quantity */}
-                <span
-                  className="
-                    inline-flex
-                    px-3 py-1.5
-                    rounded-full
-                    bg-yellow-100
-                    text-yellow-700
-                    text-button-2
-                  "
-                >
-                  {item.quantity} left
+                <span className="inline-flex shrink-0 px-3 py-1.5 rounded-full bg-red-100 text-red-700 text-button-2">
+                  Out of stock
                 </span>
               </div>
             ))}
 
-            {/* Empty */}
-            {lowStockItems.length === 0 && (
-              <div
-                className="
-                  rounded-2xl
-                  bg-surface-secondary
-                  p-8
-                  text-center
-                "
-              >
-                <p className="text-label-1 primary mb-2">
-                  Inventory looks healthy
-                </p>
-
-                <p className="secondary">No low stock alerts right now.</p>
+            {lowStockItems.length === 0 && !loading && (
+              <div className="rounded-2xl bg-surface-secondary p-8 text-center">
+                <p className="text-label-1 primary mb-2">All stocked up</p>
+                <p className="secondary">No out-of-stock items right now.</p>
               </div>
             )}
           </div>

@@ -54,7 +54,7 @@ export const MAKES = [
  */
 export const CATEGORIES = [
   {
-    id: "cauliger",
+    id: "cauliger-friends",
     name: "Cauliger & Friends",
     blurb: "The signature characters.",
     bg: "bg-cat-terra",
@@ -63,7 +63,7 @@ export const CATEGORIES = [
     lightText: true,
   },
   {
-    id: "garden",
+    id: "flower-garden",
     name: "Flower & Garden",
     blurb: "Blooms from Broccoli's garden.",
     bg: "bg-cat-moss",
@@ -72,7 +72,7 @@ export const CATEGORIES = [
     lightText: true,
   },
   {
-    id: "pets",
+    id: "people-pets",
     name: "People & Pets",
     blurb: "Your photo stitched as a keepsake.",
     bg: "bg-cat-sky",
@@ -81,7 +81,7 @@ export const CATEGORIES = [
     lightText: true,
   },
   {
-    id: "wangi",
+    id: "ugly-but-wangi",
     name: "Ugly but Wangi",
     blurb: "Charmingly odd, impossibly lovable.",
     bg: "bg-cat-pistachio",
@@ -90,8 +90,8 @@ export const CATEGORIES = [
     lightText: false,
   },
   {
-    id: "printed",
-    name: "Prints & gifts",
+    id: "prints-gifts",
+    name: "Prints & Gifts",
     blurb: "Cards, prints & paper goods.",
     bg: "bg-cat-golden",
     text: "text-walnut",

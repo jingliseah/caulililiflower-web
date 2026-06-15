@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Outlet, Link, useNavigate, useLocation } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
@@ -12,9 +12,14 @@ export default function StorefrontLayout() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [menuOpen,     setMenuOpen]     = useState(false);
+  const [shopDropOpen, setShopDropOpen] = useState(false);
+  const shopRef = useRef(null);
 
   const isActive = (path) => location.pathname === path.split("?")[0];
+
+  const handleShopMouseEnter = () => setShopDropOpen(true);
+  const handleShopMouseLeave = () => setShopDropOpen(false);
 
   return (
     <div className="min-h-screen flex flex-col bg-page font-body">
@@ -46,15 +51,63 @@ export default function StorefrontLayout() {
 
           {/* Desktop nav */}
           <nav className="hidden lg:flex gap-5 ml-3">
-            {NAV_LINKS.map((l) => (
-              <Link
-                key={l.to}
-                to={l.to}
-                className={`nav-link ${isActive(l.to) ? "active" : ""}`}
-              >
-                {l.label}
-              </Link>
-            ))}
+            {NAV_LINKS.map((l) =>
+              l.dropdown ? (
+                <div
+                  key={l.to}
+                  ref={shopRef}
+                  className="relative"
+                  onMouseEnter={handleShopMouseEnter}
+                  onMouseLeave={handleShopMouseLeave}
+                >
+                  <Link
+                    to={l.to}
+                    className={`nav-link flex items-center gap-1 ${isActive(l.to) ? "active" : ""}`}
+                  >
+                    {l.label}
+                    <svg width="10" height="6" viewBox="0 0 10 6" fill="none" className="opacity-50" aria-hidden="true">
+                      <path d="M1 1l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </Link>
+                  {shopDropOpen && (
+                    <div className="absolute top-full left-0 pt-2 z-40">
+                      <div className="bg-card hairline rounded-xl py-2 min-w-[180px] shadow-sm">
+                        <p className="font-body text-[10px] font-semibold uppercase tracking-[0.1em] text-muted px-4 pt-1 pb-2">
+                          Browse by type
+                        </p>
+                        {l.dropdown.map((item) => (
+                          <Link
+                            key={item.to}
+                            to={item.to}
+                            className="block font-body text-sm text-ink no-underline px-4 py-2 hover:bg-paper-100 transition-colors"
+                            onClick={() => setShopDropOpen(false)}
+                          >
+                            {item.label}
+                          </Link>
+                        ))}
+                        <div className="hairline-t mx-4 mt-1 pt-2">
+                          <Link
+                            to={l.to}
+                            className="block font-body text-sm font-semibold text-terracotta no-underline py-1"
+                            onClick={() => setShopDropOpen(false)}
+                          >
+                            View all →
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <Link
+                  key={l.to}
+                  to={l.to}
+                  className={`nav-link ${isActive(l.to) ? "active" : ""}`}
+                >
+                  {l.label}
+                </Link>
+              )
+            )}
           </nav>
 
           <div className="flex-1" />
@@ -117,19 +170,41 @@ export default function StorefrontLayout() {
 
         {/* ── Mobile dropdown ── */}
         {menuOpen && (
-          <div
-            className="lg:hidden bg-card hairline-t"
-            onClick={() => setMenuOpen(false)}
-          >
-            {NAV_LINKS.map((l) => (
-              <Link
-                key={l.to}
-                to={l.to}
-                className="block font-body text-base font-medium text-ink no-underline px-5 py-3 hover:bg-paper-100 transition-colors"
-              >
-                {l.label}
-              </Link>
-            ))}
+          <div className="lg:hidden bg-card hairline-t">
+            {NAV_LINKS.map((l) =>
+              l.dropdown ? (
+                <div key={l.to}>
+                  <Link
+                    to={l.to}
+                    className="block font-body text-base font-medium text-ink no-underline px-5 py-3 hover:bg-paper-100 transition-colors"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    {l.label}
+                  </Link>
+                  <div className="bg-paper-50 border-t border-b border-border-primary/30 py-1">
+                    {l.dropdown.map((item) => (
+                      <Link
+                        key={item.to}
+                        to={item.to}
+                        className="block font-body text-sm text-muted no-underline px-8 py-2 hover:bg-paper-100 transition-colors"
+                        onClick={() => setMenuOpen(false)}
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <Link
+                  key={l.to}
+                  to={l.to}
+                  className="block font-body text-base font-medium text-ink no-underline px-5 py-3 hover:bg-paper-100 transition-colors"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {l.label}
+                </Link>
+              )
+            )}
 
             <div className="mx-5 mt-2 pt-3 hairline-t">
               {user ? (

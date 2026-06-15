@@ -20,35 +20,39 @@ export function CartProvider({ children }) {
     localStorage.setItem("cart", JSON.stringify(items));
   }, [items]);
 
-  const addItem = (product, size, quantity = 1) => {
+  // product: { id, name, price, image_url, ... }
+  // variation: { id, name, price } — the specific Square variation selected
+  //   Pass null/undefined for products with a single variation (no choice needed).
+  const addItem = (product, variation, quantity = 1) => {
+    const variationId = variation?.id ?? null;
     setItems((prev) => {
       const existing = prev.find(
-        (i) => i.product.id === product.id && i.size.size_id === size.size_id
+        (i) => i.product.id === product.id && i.variation?.id === variationId
       );
       if (existing) {
         return prev.map((i) =>
-          i.product.id === product.id && i.size.size_id === size.size_id
+          i.product.id === product.id && i.variation?.id === variationId
             ? { ...i, quantity: i.quantity + quantity }
             : i
         );
       }
-      return [...prev, { product, size, quantity }];
+      return [...prev, { product, variation: variation ?? null, quantity }];
     });
   };
 
-  const removeItem = (productId, sizeId) => {
+  const removeItem = (productId, variationId) => {
     setItems((prev) =>
       prev.filter(
-        (i) => !(i.product.id === productId && i.size.size_id === sizeId)
+        (i) => !(i.product.id === productId && i.variation?.id === variationId)
       )
     );
   };
 
-  const updateQuantity = (productId, sizeId, quantity) => {
+  const updateQuantity = (productId, variationId, quantity) => {
     if (quantity < 1) return;
     setItems((prev) =>
       prev.map((i) =>
-        i.product.id === productId && i.size.size_id === sizeId
+        i.product.id === productId && i.variation?.id === variationId
           ? { ...i, quantity }
           : i
       )
@@ -58,10 +62,11 @@ export function CartProvider({ children }) {
   const clearCart = () => setItems([]);
 
   const totalItems = items.reduce((acc, i) => acc + i.quantity, 0);
-  const totalPrice = items.reduce(
-    (acc, i) => acc + Number(i.product.price) * i.quantity,
-    0
-  );
+  // Unit price comes from the selected variation if available, otherwise product base price
+  const totalPrice = items.reduce((acc, i) => {
+    const unitPrice = i.variation?.price ?? Number(i.product.price);
+    return acc + unitPrice * i.quantity;
+  }, 0);
 
   return (
     <CartContext.Provider

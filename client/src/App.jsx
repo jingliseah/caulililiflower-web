@@ -13,7 +13,6 @@ import SellerOverview from "./pages/Seller/Overview";
 import Products from "./pages/Seller/Products";
 import CreateProduct from "./pages/Seller/CreateProduct";
 import EditProduct from "./pages/Seller/EditProduct";
-import Inventory from "./pages/Seller/Inventory";
 import SellerOrders from "./pages/Seller/Orders";
 
 // Admin
@@ -72,7 +71,6 @@ function App() {
         <Route path="products" element={<Products />} />
         <Route path="products/create" element={<CreateProduct />} />
         <Route path="products/:id/edit" element={<EditProduct />} />
-        <Route path="inventory" element={<Inventory />} />
         <Route path="orders" element={<SellerOrders />} />
       </Route>
 

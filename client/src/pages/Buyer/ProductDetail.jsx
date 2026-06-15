@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImage } from "@fortawesome/free-regular-svg-icons";
 import { useCart } from "../../context/CartContext";
 import QuantityStepper from "../../components/QuantityStepper";
 import { MAKES, HOOP_FINISHES } from "../../data/products";
 
-/* Tone → pill colour classes — only used in this file */
 const BADGE = {
   terra:  "bg-[#fde8df] text-terracotta-deep",
   moss:   "bg-[#e4ead9] text-moss-deep",
@@ -15,48 +14,67 @@ const BADGE = {
 
 export default function ProductDetail() {
   const { id } = useParams();
-  const navigate = useNavigate();
   const { addItem, openCart } = useCart();
 
-  const [product, setProduct] = useState(null);
-  const [inventory, setInventory] = useState([]);
-  const [selectedSize, setSelectedSize] = useState(null);
-  const [quantity, setQuantity] = useState(1);
-  const [added, setAdded] = useState(false);
-  const [activeSwatch, setActiveSwatch] = useState(0);
+  const [product, setProduct]           = useState(null);
+  const [loading, setLoading]           = useState(true);
+  const [selectedVariation, setSelectedVariation] = useState(null);
+  const [quantity, setQuantity]         = useState(1);
+  const [added, setAdded]               = useState(false);
+  const [activeThumb, setActiveThumb]   = useState(0);
 
   useEffect(() => {
+    setLoading(true);
     fetch(`/api/products/${id}`)
       .then((r) => r.json())
-      .then(setProduct)
-      .catch(console.error);
-    fetch(`/api/inventory/product/${id}`)
-      .then((r) => r.json())
       .then((data) => {
-        setInventory(data);
-        if (data.length > 0) setSelectedSize(data[0]);
+        setProduct(data);
+        // Auto-select first in-stock variation, or first variation overall
+        if (data?.variations?.length > 0) {
+          const first = data.variations.find((v) => v.in_stock) ?? data.variations[0];
+          setSelectedVariation(first);
+        }
+        setLoading(false);
       })
-      .catch(console.error);
+      .catch(() => setLoading(false));
   }, [id]);
 
   const handleAddToCart = () => {
-    if (!selectedSize) return;
-    addItem(product, selectedSize, quantity);
+    if (!product) return;
+    // For single-variation products selectedVariation may be null — use product price
+    addItem(product, selectedVariation, quantity);
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
     openCart();
   };
 
-  if (!product)
+  if (loading) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
         <p className="font-body text-muted">Loading…</p>
       </div>
     );
+  }
 
-  const makeMeta = MAKES.find((m) => m.id === product.make) ?? MAKES[0];
-  const badge = BADGE[makeMeta.tone] || BADGE.terra;
-  const cantAdd = inventory.length > 0 && !selectedSize;
+  if (!product) {
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <p className="font-body text-muted">Product not found.</p>
+      </div>
+    );
+  }
+
+  const hasVariations = product.variations.length > 1;
+  const displayPrice  = selectedVariation?.price ?? product.price;
+  const inStock       = product.variations.length === 0
+    ? product.in_stock
+    : selectedVariation
+      ? selectedVariation.in_stock
+      : product.in_stock;
+  const cantAdd = hasVariations && !selectedVariation;
+
+  // MAKES lookup for badge — optional (products don't have a `make` field from Square)
+  const makeMeta = null;
 
   return (
     <div className="bg-page">
@@ -66,28 +84,16 @@ export default function ProductDetail() {
           className="flex gap-2 items-center font-body text-sm font-medium text-muted mb-8"
           aria-label="Breadcrumb"
         >
-          <Link
-            to="/home"
-            className="text-muted no-underline hover:text-ink transition-colors"
-          >
-            Home
-          </Link>
+          <Link to="/home" className="text-muted no-underline hover:text-ink transition-colors">Home</Link>
           <span>/</span>
-          <Link
-            to="/shop"
-            className="text-muted no-underline hover:text-ink transition-colors"
-          >
-            Shop
-          </Link>
+          <Link to="/shop" className="text-muted no-underline hover:text-ink transition-colors">Shop</Link>
           <span>/</span>
           <span className="text-ink">{product.name}</span>
         </nav>
 
-        {/* Two-column layout: stacks on mobile */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-14 items-start">
           {/* ── Gallery ── */}
           <div className="flex flex-col gap-3.5">
-            {/* Main image */}
             <div className="aspect-square bg-paper-100 rounded-xl hairline flex items-center justify-center overflow-hidden">
               {product.image_url ? (
                 <img
@@ -99,48 +105,46 @@ export default function ProductDetail() {
                 <FontAwesomeIcon icon={faImage} className="text-[64px] text-paper-300" aria-hidden="true" />
               )}
             </div>
-            {/* Thumbnail strip */}
+            {/* Thumbnail strip — placeholder swatches until multi-image support */}
             <div className="grid grid-cols-4 gap-2.5">
-              {["bg-paper-100", "bg-cream", "bg-cat-moss", "bg-cat-sky"].map(
-                (bg, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setActiveSwatch(i)}
-                    className={`aspect-square ${bg} rounded-xl cursor-pointer transition-all ${activeSwatch === i ? "ring-2 ring-walnut ring-offset-1" : "hairline"}`}
-                    aria-label={`View swatch ${i + 1}`}
-                  />
-                ),
-              )}
+              {["bg-paper-100", "bg-cream", "bg-cat-moss", "bg-cat-sky"].map((bg, i) => (
+                <button
+                  key={i}
+                  onClick={() => setActiveThumb(i)}
+                  className={`aspect-square ${bg} rounded-xl cursor-pointer transition-all ${activeThumb === i ? "ring-2 ring-walnut ring-offset-1" : "hairline"}`}
+                  aria-label={`View image ${i + 1}`}
+                />
+              ))}
             </div>
           </div>
 
           {/* ── Product info ── */}
           <div>
-            <span className="font-body text-xs font-semibold uppercase tracking-wider text-muted">
-              SKU: {product.sku}
-            </span>
+            {product.category_name && (
+              <span className="font-body text-xs font-semibold uppercase tracking-wider text-muted">
+                {product.category_name}
+              </span>
+            )}
             <h1 className="font-display text-[28px] md:text-[38px] lg:text-[44px] font-normal text-walnut mt-2.5 mb-3.5 leading-[1.04]">
               {product.name}
             </h1>
 
-            <div className="flex items-center gap-3.5 mb-6">
+            <div className="flex items-center gap-3.5 mb-5">
               <span className="font-body text-2xl font-semibold text-walnut">
-                RM {Number(product.price).toFixed(2)}
+                RM {displayPrice.toFixed(2)}
               </span>
-              <span
-                className={`px-3 py-1 rounded-full font-body text-xs font-semibold uppercase tracking-[0.08em] ${badge}`}
-              >
-                {makeMeta.label}
+              <span className={`px-3 py-1 rounded-full font-body text-xs font-semibold uppercase tracking-[0.08em] ${inStock ? "bg-[#e4ead9] text-moss-deep" : "bg-paper-100 text-muted"}`}>
+                {inStock ? "In stock" : "Out of stock"}
               </span>
             </div>
 
-            <p className="font-body text-base leading-relaxed text-ink max-w-[50ch] mb-8">
-              Redrawn by hand into Cauliger's storybook style and stitched in
-              soft cotton thread, framed in a wooden hoop — a celebration of
-              connection.
-            </p>
+            {product.description && (
+              <p className="font-body text-base leading-relaxed text-ink max-w-[50ch] mb-8">
+                {product.description}
+              </p>
+            )}
 
-            {/* Hoop finish */}
+            {/* Hoop finish — display only (Square doesn't map to this) */}
             <div className="mb-6">
               <span className="font-body text-sm font-semibold text-strong block mb-2.5">
                 Hoop finish
@@ -149,33 +153,36 @@ export default function ProductDetail() {
                 {HOOP_FINISHES.map((sw, i) => (
                   <button
                     key={i}
-                    onClick={() => setActiveSwatch(i)}
+                    onClick={() => setActiveThumb(i)}
                     aria-label={sw.label}
                     title={sw.label}
-                    className={`w-9 h-9 rounded-full ${sw.bg} cursor-pointer transition-all ${activeSwatch === i ? "ring-[2.5px] ring-walnut ring-offset-1" : "hairline"}`}
+                    className={`w-9 h-9 rounded-full ${sw.bg} cursor-pointer transition-all ${activeThumb === i ? "ring-[2.5px] ring-walnut ring-offset-1" : "hairline"}`}
                   />
                 ))}
               </div>
             </div>
 
-            {/* Size selector */}
-            {inventory.length > 0 && (
+            {/* Variation selector — shown only when product has multiple variations */}
+            {hasVariations && (
               <div className="mb-6">
                 <span className="font-body text-sm font-semibold text-strong block mb-2.5">
-                  Size
+                  Variation
                 </span>
                 <div className="flex gap-2.5 flex-wrap">
-                  {inventory.map((item) => (
+                  {product.variations.map((v) => (
                     <button
-                      key={item.size_id}
-                      onClick={() => setSelectedSize(item)}
+                      key={v.id}
+                      onClick={() => setSelectedVariation(v)}
+                      disabled={!v.in_stock}
                       className={`min-w-[52px] h-11 px-4 rounded-xl font-body text-sm font-semibold cursor-pointer transition-all ${
-                        selectedSize?.size_id === item.size_id
+                        selectedVariation?.id === v.id
                           ? "bg-walnut text-cream hairline"
-                          : "bg-card text-ink hairline hover:border-walnut"
+                          : v.in_stock
+                            ? "bg-card text-ink hairline hover:border-walnut"
+                            : "bg-card text-muted hairline opacity-40 cursor-not-allowed line-through"
                       }`}
                     >
-                      {item.size}
+                      {v.name}
                     </button>
                   ))}
                 </div>
@@ -187,28 +194,26 @@ export default function ProductDetail() {
               <QuantityStepper value={quantity} onChange={setQuantity} min={1} />
               <button
                 onClick={handleAddToCart}
-                disabled={cantAdd}
-                className={`button-primary flex-1 transition-colors ${added ? "!bg-moss" : ""} ${cantAdd ? "opacity-50 cursor-not-allowed" : ""}`}
+                disabled={cantAdd || !inStock}
+                className={`button-primary flex-1 transition-colors ${added ? "!bg-moss" : ""} ${cantAdd || !inStock ? "opacity-50 cursor-not-allowed" : ""}`}
               >
                 {added
                   ? "Added to cart ✓"
-                  : `Add to cart · RM ${(Number(product.price) * quantity).toFixed(2)}`}
+                  : !inStock
+                    ? "Out of stock"
+                    : `Add to cart · RM ${(displayPrice * quantity).toFixed(2)}`}
               </button>
             </div>
 
-            {/* Callout cards */}
+            {/* Info callout cards */}
             <div className="bg-[#deedf7] rounded-lg p-4 mb-3">
-              <p className="font-body text-sm font-semibold text-cauli-sky-deep m-0 mb-1">
-                {makeMeta.label}
-              </p>
+              <p className="font-body text-sm font-semibold text-cauli-sky-deep m-0 mb-1">Handcrafted</p>
               <p className="font-body text-sm text-cauli-sky-deep m-0 opacity-85">
-                {makeMeta.leadFull}
+                Every piece is hand-stitched in cotton thread and framed in a wooden hoop.
               </p>
             </div>
             <div className="bg-[#e4ead9] rounded-lg p-4">
-              <p className="font-body text-sm font-semibold text-moss-deep m-0 mb-1">
-                Free local pickup
-              </p>
+              <p className="font-body text-sm font-semibold text-moss-deep m-0 mb-1">Free local pickup</p>
               <p className="font-body text-sm text-moss-deep m-0 opacity-85">
                 Collect from the studio in Bangsar, or ship nationwide.
               </p>

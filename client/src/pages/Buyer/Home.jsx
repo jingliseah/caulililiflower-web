@@ -76,7 +76,7 @@ export default function Home() {
           {MAKES.map((m) => (
             <button
               key={m.id}
-              onClick={() => navigate(`/shop?make=${m.id}`)}
+              onClick={() => navigate("/shop")}
               className="make-card p-6 lg:p-7 text-left gap-2.5"
             >
               <span
@@ -97,87 +97,6 @@ export default function Home() {
           ))}
         </div>
       </section>
-
-      {/* ══ COLLECTIONS ════════════════════════════════ */}
-      <section className="page-container pb-12 lg:pb-16">
-        <div className="flex items-end justify-between mb-6">
-          <div>
-            <span className="eyebrow text-moss mb-2">Collections</span>
-            <h2 className="font-display text-[26px] md:text-[36px] font-normal text-walnut mt-2">
-              Shop by little world
-            </h2>
-          </div>
-          <button
-            onClick={() => navigate("/shop")}
-            className="bg-transparent border-none cursor-pointer font-body text-sm font-semibold text-terracotta hover:text-terracotta-deep transition-colors"
-          >
-            View all →
-          </button>
-        </div>
-
-        {/* Mobile: horizontal scroll */}
-        <div className="flex gap-3 overflow-x-auto no-scrollbar pb-2 md:hidden">
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat.id}
-              onClick={() => navigate(`/shop?cat=${cat.id}`)}
-              className={`cat-card flex-shrink-0 w-40 p-4 pb-3.5 ${cat.bg}`}
-            >
-              <span
-                className={`font-display text-[17px] font-normal ${cat.text} leading-snug`}
-              >
-                {cat.name}
-              </span>
-              <span
-                className={`font-body text-xs leading-snug ${cat.text} opacity-85 mt-1.5`}
-              >
-                {cat.blurb}
-              </span>
-            </button>
-          ))}
-        </div>
-
-        {/* Tablet / Desktop: 3+2 grid */}
-        <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 gap-3">
-          {CATEGORIES.slice(0, 3).map((cat) => (
-            <button
-              key={cat.id}
-              onClick={() => navigate(`/shop?cat=${cat.id}`)}
-              className={`cat-card p-7 pb-6 min-h-[140px] ${cat.bg}`}
-            >
-              <span
-                className={`font-display text-xl font-normal ${cat.text} leading-snug`}
-              >
-                {cat.name}
-              </span>
-              <span
-                className={`font-body text-sm leading-normal ${cat.text} opacity-88 mt-1.5`}
-              >
-                {cat.blurb}
-              </span>
-            </button>
-          ))}
-        </div>
-        <div className="hidden md:grid grid-cols-2 gap-3 mt-3">
-          {CATEGORIES.slice(3).map((cat) => (
-            <button
-              key={cat.id}
-              onClick={() => navigate(`/shop?cat=${cat.id}`)}
-              className={`cat-card p-6 pb-5 ${cat.bg}`}
-            >
-              <span className={`font-display text-xl font-normal ${cat.text}`}>
-                {cat.name}
-              </span>
-              <span
-                className={`font-body text-sm leading-normal ${cat.text} opacity-88 mt-1.5`}
-              >
-                {cat.blurb}
-              </span>
-            </button>
-          ))}
-        </div>
-      </section>
-
       {/* ══ FEATURED PRODUCTS ══════════════════════════ */}
       {featured.length > 0 && (
         <section className="page-container pb-12 lg:pb-16">
@@ -202,6 +121,87 @@ export default function Home() {
           </div>
         </section>
       )}
+
+      {/* ══ COLLECTIONS ════════════════════════════════ */}
+      <section className="page-container pb-12 lg:pb-16">
+        <div className="flex items-end justify-between mb-6">
+          <div>
+            <span className="eyebrow text-moss mb-2">Collections</span>
+            <h2 className="font-display text-[26px] md:text-[36px] font-normal text-walnut mt-2">
+              Shop by little world
+            </h2>
+          </div>
+          <button
+            onClick={() => navigate("/shop")}
+            className="bg-transparent border-none cursor-pointer font-body text-sm font-semibold text-terracotta hover:text-terracotta-deep transition-colors"
+          >
+            View all →
+          </button>
+        </div>
+
+        {/* Mobile: horizontal scroll */}
+        <div className="flex gap-3 overflow-x-auto no-scrollbar pb-2 md:hidden">
+          {CATEGORIES.map((cat) => (
+            <button
+              key={cat.id}
+              onClick={() => navigate(`/shop?col=${cat.id}`)}
+              className={`cat-card flex-shrink-0 w-40 p-4 pb-3.5 ${cat.bg}`}
+            >
+              <span
+                className={`font-display text-[17px] font-normal ${cat.text} leading-snug`}
+              >
+                {cat.name}
+              </span>
+              <span
+                className={`font-body text-xs leading-snug ${cat.text} opacity-85 mt-1.5`}
+              >
+                {cat.blurb}
+              </span>
+            </button>
+          ))}
+        </div>
+
+        {/* Tablet / Desktop: 3+2 grid */}
+        <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 gap-3">
+          {CATEGORIES.slice(0, 3).map((cat) => (
+            <button
+              key={cat.id}
+              onClick={() => navigate(`/shop?col=${cat.id}`)}
+              className={`cat-card p-7 pb-6 min-h-[140px] ${cat.bg}`}
+            >
+              <span
+                className={`font-display text-xl font-normal ${cat.text} leading-snug`}
+              >
+                {cat.name}
+              </span>
+              <span
+                className={`font-body text-sm leading-normal ${cat.text} opacity-88 mt-1.5`}
+              >
+                {cat.blurb}
+              </span>
+            </button>
+          ))}
+        </div>
+        <div className="hidden md:grid grid-cols-2 gap-3 mt-3">
+          {CATEGORIES.slice(3).map((cat) => (
+            <button
+              key={cat.id}
+              onClick={() => navigate(`/shop?col=${cat.id}`)}
+              className={`cat-card p-6 pb-5 ${cat.bg}`}
+            >
+              <span className={`font-display text-xl font-normal ${cat.text}`}>
+                {cat.name}
+              </span>
+              <span
+                className={`font-body text-sm leading-normal ${cat.text} opacity-88 mt-1.5`}
+              >
+                {cat.blurb}
+              </span>
+            </button>
+          ))}
+        </div>
+      </section>
+
 
       {/* ══ PROCESS ════════════════════════════════════ */}
       <section className="page-container pb-16 lg:pb-20">

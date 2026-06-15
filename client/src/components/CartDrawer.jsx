@@ -8,7 +8,13 @@ import QuantityStepper from "./QuantityStepper";
 import Thumbnail from "../assets/thumbnail.png";
 
 function ProductThumb({ product }) {
-  return <img src={product.image_url || Thumbnail} alt={product.name} className="w-full h-full object-cover" />;
+  return (
+    <img
+      src={product.image_url || Thumbnail}
+      alt={product.name}
+      className="w-full h-full object-cover"
+    />
+  );
 }
 
 export default function CartDrawer() {
@@ -52,11 +58,7 @@ export default function CartDrawer() {
               </span>
             )}
           </div>
-          <button
-            onClick={closeCart}
-            className="icon-btn text-muted"
-            aria-label="Close cart"
-          >
+          <button onClick={closeCart} className="icon-btn text-muted" aria-label="Close cart">
             <CloseIcon />
           </button>
         </div>
@@ -76,48 +78,50 @@ export default function CartDrawer() {
               </button>
             </div>
           ) : (
-            items.map(item => (
-              <div
-                key={`${item.product.id}-${item.size?.size_id}`}
-                className="flex gap-3.5 items-start p-3.5 bg-page rounded-lg hairline"
-              >
-                {/* Thumbnail */}
-                <div className="w-[72px] h-[72px] flex-shrink-0 rounded-xl bg-paper-100 overflow-hidden flex items-center justify-center">
-                  <ProductThumb product={item.product} />
-                </div>
+            items.map((item) => {
+              const unitPrice = item.variation?.price ?? Number(item.product.price);
+              return (
+                <div
+                  key={`${item.product.id}-${item.variation?.id ?? "default"}`}
+                  className="flex gap-3.5 items-start p-3.5 bg-page rounded-lg hairline"
+                >
+                  {/* Thumbnail */}
+                  <div className="w-[72px] h-[72px] flex-shrink-0 rounded-xl bg-paper-100 overflow-hidden flex items-center justify-center">
+                    <ProductThumb product={item.product} />
+                  </div>
 
-                {/* Info */}
-                <div className="flex-1 min-w-0">
-                  <p className="font-display text-[17px] text-walnut m-0 mb-0.5 leading-snug truncate">
-                    {item.product.name}
-                  </p>
-                  {item.size?.size && (
-                    <p className="font-body text-xs text-muted m-0 mb-2.5">Size: {item.size.size}</p>
-                  )}
-                  <div className="flex items-center justify-between">
-                    <QuantityStepper
-                      size="sm"
-                      value={item.quantity}
-                      onChange={(v) => updateQuantity(item.product.id, item.size?.size_id, v)}
-                      min={1}
-                    />
-
-                    <div className="flex items-center gap-2.5">
-                      <span className="font-body text-[15px] font-semibold text-walnut">
-                        RM {(Number(item.product.price) * item.quantity).toFixed(2)}
-                      </span>
-                      <button
-                        onClick={() => removeItem(item.product.id, item.size?.size_id)}
-                        className="bg-transparent border-none cursor-pointer text-muted p-1 flex items-center hover:text-strong transition-colors"
-                        aria-label={`Remove ${item.product.name}`}
-                      >
-                        <TrashIcon />
-                      </button>
+                  {/* Info */}
+                  <div className="flex-1 min-w-0">
+                    <p className="font-display text-[17px] text-walnut m-0 mb-0.5 leading-snug truncate">
+                      {item.product.name}
+                    </p>
+                    {item.variation?.name && (
+                      <p className="font-body text-xs text-muted m-0 mb-2.5">{item.variation.name}</p>
+                    )}
+                    <div className="flex items-center justify-between">
+                      <QuantityStepper
+                        size="sm"
+                        value={item.quantity}
+                        onChange={(v) => updateQuantity(item.product.id, item.variation?.id ?? null, v)}
+                        min={1}
+                      />
+                      <div className="flex items-center gap-2.5">
+                        <span className="font-body text-[15px] font-semibold text-walnut">
+                          RM {(unitPrice * item.quantity).toFixed(2)}
+                        </span>
+                        <button
+                          onClick={() => removeItem(item.product.id, item.variation?.id ?? null)}
+                          className="bg-transparent border-none cursor-pointer text-muted p-1 flex items-center hover:text-strong transition-colors"
+                          aria-label={`Remove ${item.product.name}`}
+                        >
+                          <TrashIcon />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))
+              );
+            })
           )}
         </div>
 

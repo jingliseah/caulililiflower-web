@@ -1,35 +1,24 @@
 import express from "express";
-
+import multer from "multer";
 import {
   getAllProducts,
-  getSellerProducts,
+  getProduct,
   createProduct,
-  deleteProduct,
-  getProductById,
   updateProduct,
+  removeProduct,
+  updateStock,
+  uploadImage,
 } from "../controllers/productsController.js";
 
 const router = express.Router();
+const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 } });
 
-// Get all products
 router.get("/", getAllProducts);
-
-// Get seller products
-router.get(
-  "/seller/:sellerId",
-  getSellerProducts
-);
-
-// Create product
 router.post("/", createProduct);
-
-// Get single product by id
-router.get("/:id", getProductById);
-
-// Update product
+router.post("/stock", updateStock);
+router.get("/:id", getProduct);
 router.put("/:id", updateProduct);
-
-// Delete product
-router.delete("/:id", deleteProduct);
+router.delete("/:id", removeProduct);
+router.post("/:id/image", upload.single("image"), uploadImage);
 
 export default router;

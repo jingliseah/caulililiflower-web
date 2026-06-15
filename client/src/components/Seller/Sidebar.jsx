@@ -85,10 +85,6 @@ export default function Sidebar() {
             Add Product
           </NavLink>
 
-          <NavLink to="/seller/inventory" className={navItemClass}>
-            Inventory
-          </NavLink>
-
           <NavLink to="/seller/orders" className={navItemClass}>
             Orders
           </NavLink>
