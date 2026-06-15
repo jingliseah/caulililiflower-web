@@ -8,11 +8,7 @@ export default function ProductCard({ product, onDelete }) {
         <img
           src={product.image_url}
           alt={product.name}
-          className="
-                w-full
-                h-full
-                object-cover
-            "
+          className="w-full h-full object-cover"
         />
       </div>
 
@@ -28,20 +24,14 @@ export default function ProductCard({ product, onDelete }) {
         <div className="flex gap-3 mt-6">
           <Link
             to={`/seller/products/${product.id}/edit`}
-            className="
-                button-secondary
-                flex-1
-            "
+            className="button-secondary flex-1"
           >
             Edit
           </Link>
 
           <button
             onClick={() => onDelete(product.id)}
-            className="
-                button-primary
-                flex-1
-            "
+            className="button-primary flex-1"
           >
             Delete
           </button>

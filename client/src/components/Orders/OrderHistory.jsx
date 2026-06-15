@@ -16,10 +16,8 @@ export default function OrderHistory({ orders }) {
   }
 
   // Status styles
-  const getStatusClass = (status) => {
-
+  const getStatusClass = (status) => {  
     switch (status) {
-
       case "pending":
         return "bg-yellow-100 text-yellow-700";
 
