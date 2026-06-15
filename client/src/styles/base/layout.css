@@ -1,0 +1,15 @@
+/*
+  Layout
+  =================================================================================
+  This file contains custom tailwind components for custom layout related variables.
+  e.g. grid, row, column, container, etc.
+  =================================================================================
+*/
+@layer base {
+  :root {
+    --gap: 15px;
+
+    /* radius */
+    --radius-full: 100px;
+  }
+}

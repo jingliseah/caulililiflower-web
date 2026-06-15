@@ -1,0 +1,129 @@
+/* =========================================================
+   CORE COLORS
+========================================================= */
+
+@theme {
+  /* Neutral */
+  --color-white: #ffffff;
+
+  --color-grey-50: #fafaf8;
+  --color-grey-100: #f3f3f1;
+  --color-grey-200: #e8e6e1;
+  --color-grey-300: #d8d5cf;
+  --color-grey-400: #b5b1aa;
+  --color-grey-500: #8b8680;
+  --color-grey-600: #6b6761;
+  --color-grey-700: #4b4844;
+  --color-grey-800: #2b2a28;
+  --color-grey-900: #111111;
+
+  --color-black-opacity-70: rgba(0, 0, 0, 0.7);
+
+  /* Brand */
+  --color-brand-primary: #111111;
+  --color-brand-secondary: #f7f7f5;
+  --color-brand-accent: #d8f5d0;
+
+  /* Purple */
+  --color-purple-50: #f5f3ff;
+  --color-purple-100: #ede9fe;
+  --color-purple-200: #ddd6fe;
+  --color-purple-300: #c4b5fd;
+  --color-purple-400: #a78bfa;
+  --color-purple-500: #8b5cf6;
+  --color-purple-600: #7c3aed;
+  --color-purple-700: #6d28d9;
+  --color-purple-800: #5b21b6;
+  --color-purple-900: #4c1d95;
+
+  --color-purple-500-opacity-80: rgba(139, 92, 246, 0.8);
+
+  /* Status */
+  --color-success: #0f7855;
+  --color-warning: #f59e0b;
+  --color-danger: #dc2626;
+
+  /* Surface */
+  --color-surface-primary: #ffffff;
+  --color-surface-secondary: #fafaf8;
+  --color-surface-tertiary: #f3f3f1;
+
+  /* Borders */
+  --color-border-primary: #eceae4;
+  --color-border-secondary: #d8d5cf;
+
+  /* Text */
+  --color-text-primary: #111111;
+  --color-text-secondary: #6b6761;
+  --color-text-muted: #9b9790;
+
+  /* =========================================================
+     TYPOGRAPHY
+  ========================================================= */
+
+  /* Fonts */
+  --family-sans: "Inter";
+  --family-serif: "Lora";
+  --family-nunito: "Nunito";
+
+  /* Font weight */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semi-bold: 600;
+  --font-weight-bold: 700;
+  --font-weight-black: 900;
+
+  /* Font size */
+  --font-size-12: 12px;
+  --font-size-14: 14px;
+  --font-size-16: 16px;
+  --font-size-18: 18px;
+  --font-size-20: 20px;
+  --font-size-24: 24px;
+  --font-size-28: 28px;
+  --font-size-32: 32px;
+  --font-size-40: 40px;
+  --font-size-48: 48px;
+
+  /* Line height */
+  --line-height-xs: 16px;
+  --line-height-sm: 20px;
+  --line-height-md: 24px;
+  --line-height-lg: 28px;
+  --line-height-xl: 32px;
+  --line-height-2xl: 40px;
+  --line-height-4xl: 52px;
+
+  /* Letter spacing */
+  --letter-spacing-none: 0;
+  --letter-spacing-sm: 0.2px;
+  --letter-spacing-md: 0.5px;
+  --letter-spacing-lg: 1px;
+
+  /* =========================================================
+     RADIUS
+  ========================================================= */
+
+  --radius-sm: 12px;
+  --radius-md: 18px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --radius-full: 999px;
+
+  /* =========================================================
+     SHADOWS
+  ========================================================= */
+
+  --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.04);
+
+  --shadow-card: 0 12px 30px rgba(0, 0, 0, 0.06);
+
+  --shadow-floating: 0 20px 50px rgba(0, 0, 0, 0.12);
+
+  /* =========================================================
+     SPACING
+  ========================================================= */
+
+  --spacing-18: 72px;
+  --spacing-22: 88px;
+}

@@ -1,0 +1,28 @@
+/* from figma as of 17 Nov 2025 */
+@layer base {
+  /* root base styles */
+  html,
+  body {
+    font-family: var(--family-nunito), Arial, sans-serif;
+    font-display: swap;
+    -webkit-font-smoothing: antialiased; /* For macOS/Webkit */
+    -moz-osx-font-smoothing: grayscale; /* For macOS/Firefox */
+    text-rendering: optimizeLegibility; /* Enhance text rendering */
+  }
+}
+
+/* ads style */
+#prestitial_ad_overlay {
+  display: none;
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  z-index: 1000001;
+  top: 0;
+  left: 0;
+  background-color: #ffffff;
+  overflow-y: hidden;
+}
+html.has-overlay #prestitial_ad_overlay {
+  display: block;
+}

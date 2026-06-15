@@ -1,0 +1,66 @@
+/* Figma: https://www.figma.com/design/nItEr6AkDkI9N1h25PHivH/ThinkChina-Web-Page-FY2025?node-id=2708-4148&m=dev */
+
+@theme {
+  /* text */
+  --color-primary: var(--color-grey-700);
+  --color-secondary: var(--color-grey-600);
+  --color-tertiary: var(--color-grey-400);
+  --color-primary-on-dark: var(--color-white);
+  --color-secondary-on-dark: var(--color-grey-200);
+  --color-tertiary-on-dark: var(--color-grey-400);
+  --color-brand-primary: var(--color-purple-500);
+  --color-brand-secondary: var(--color-purple-200);
+  --color-alert: var(--color-purple-400);
+  --color-success: var(--color-green-500);
+
+  /* icon */
+  --color-icon-enabled: var(--color-grey-700);
+  --color-icon-disabled: var(--color-grey-200);
+  --color-icon-enabled-on-dark: var(--color-white);
+  --color-icon-disabled-on-dark: var(--color-grey-600);
+  --color-icon-brand: var(--color-purple-500);
+  --color-icon-alert: var(--color-purple-400);
+
+  /* background */
+  --color-background-default: var(--color-white);
+  --color-background-secondary: var(--color-grey-50);
+  --color-background-tertiary: var(--color-grey-100);
+  --color-background-quarternary: var(--color-purple-100);
+  --color-background-brand-primary: var(--color-purple-500);
+  --color-background-brand-overlay: var(--color-purple-500-opacity-80);
+  --color-background-primary-on-dark: var(--color-grey-800);
+  --color-background-secondary-on-dark: var(--color-grey-700);
+  --color-background-overlay: var(--color-black-opacity-70);
+
+  /* button */
+  --color-button-primary: var(--color-purple-500);
+  --color-button-primary-hover: var(--color-purple-600);
+  --color-button-primary-label: var(--color-white);
+  --color-button-secondary: var(--color-grey-500);
+  --color-button-secondary-hover: var(--color-grey-600);
+  --color-button-secondary-label: var(--color-white);
+  --color-button-tertiary: var(--color-grey-50);
+  --color-button-tertiary-hover: var(--color-grey-100);
+  --color-button-tertiary-label: var(--color-grey-600);
+  --color-button-ghost-hover: var(--color-grey-100);
+  --color-button-ghost-label-on-dark: var(--color-white);
+  --color-button-ghost-hover-on-dark: var(--color-grey-700);
+
+  /* divider */
+  --color-divider-primary: var(--color-grey-200);
+  --color-divider-secondary: var(--color-grey-100);
+  --color-divider-primary-on-dark: var(--color-grey-300);
+  --color-divider-secondary-on-dark: var(--color-grey-700);
+  --color-divider-brand: var(--color-purple-500);
+  --color-divider-success: var(--color-green-500);
+
+  /* link */
+  --color-link-default: var(--color-purple-500);
+  --color-link-hover: var(--color-purple-600);
+  --color-link-video: var(--color-purple-400);
+  --color-link-video-hover: var(--color-purple-500);
+
+  /* control */
+  --color-control-selected: var(--color-grey-700);
+  --color-control-secondary: var(--color-grey-200);
+}
